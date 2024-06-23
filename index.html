@@ -2,33 +2,35 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ソロモードお題</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./style.css">
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+  <title>キャラクターとお題のペア生成</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="app">
+    <!-- 入力欄セクション -->
     <div class="input-section">
-      <h2>キャラクター名入力</h2>
-      <p>例: 佐藤, 鈴木, 高橋, 田中, 渡辺, 伊藤, 山本, 中村</p>
-      <textarea v-model="characterInput" placeholder="キャラクターリスト（コンマで区切ってください）"></textarea>
+      <h2>キャラクターとお題を入力してください</h2>
+      <p>カンマ区切りで複数の項目を入力してください（例: 上田, 高橋, 山田, 佐藤, 鈴木, 田中, 中村, 小林）</p>
+      <textarea placeholder="キャラクターを入力" v-model="characterInput"></textarea> <!-- キャラクター入力欄 -->
+      <textarea placeholder="お題を入力" v-model="topicInput"></textarea> <!-- お題入力欄 -->
+      <button @click="generatePairs">生成</button> <!-- 生成ボタン -->
     </div>
-    <div class="input-section">
-      <h2>お題入力</h2>
-      <p>例: 約束, 手紙, 消えた言葉, 二人だけの秘密, 腐れ縁, 夢の中, 想い出の香り, 植え付け</p>
-      <textarea v-model="topicInput" placeholder="お題リスト（コンマで区切ってください）"></textarea>
-    </div>
-    <button @click="generatePairs">生成</button>
-    <div id="result" v-if="pairs.length">
-      <h2>結果</h2>
+
+    <!-- 結果セクション -->
+    <div id="result">
+      <h2>生成された組み合わせ</h2>
       <ul>
+        <!-- 生成されたペアをリスト表示 -->
         <li v-for="(pair, index) in pairs" :key="index">
           <strong>{{ pair.character }}</strong> - {{ pair.topic }}
         </li>
       </ul>
     </div>
   </div>
-  <script src="./script.js"></script>
+
+  <!-- Vue.js本体のスクリプト -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="script.js"></script> 
 </body>
 </html>
