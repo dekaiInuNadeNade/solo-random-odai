@@ -3,104 +3,143 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ソロ用複数人お題組み合わせツール</title>
-  <!-- Vuetify CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.5.10/dist/vuetify.min.css" rel="stylesheet">
+  <title>キャラクターとお題のペア生成</title>
   <style>
+    /* 全体のスタイル */
     body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #ffffff;
-      color: #202124;
-      min-height: 100vh;
+      font-family: 'Roboto', 'Arial', sans-serif;
+      background-color: #f4f4f9;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
       margin: 0;
     }
+
     #app {
-      max-width: 900px;
-      width: 100%;
-      margin: auto;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 80%;
     }
-    .note {
+
+    /* 入力欄のスタイル */
+    .input-section {
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .input-section h2 {
+      margin-bottom: 10px;
+      color: #3f51b5;
+    }
+
+    .input-section p {
+      margin-bottom: 15px;
+      font-size: 0.9em;
+      color: #757575;
+    }
+
+    .input-section textarea {
+      width: 100%;
+      height: 60px;
+      padding: 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      font-size: 0.9em;
+      box-sizing: border-box;
+    }
+
+    /* 生成ボタンのスタイル */
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: none;
+      border-radius: 4px;
+      background-color: #3f51b5;
+      color: white;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #303f9f;
+    }
+
+    /* 結果のスタイル */
+    #result {
+      margin-top: 20px;
+    }
+
+    #result h2 {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      padding-bottom: 5px;
+      border-bottom: 2px solid #3f51b5;
+      color: #3f51b5;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
       padding: 15px;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      margin-bottom: 10px;
-      border-left: 8px solid transparent;
+      border-bottom: 1px solid #e0e0e0;
     }
-    .note:nth-child(odd) {
-      background-color: #f7f7f7;
-      border-left-color: #d1d1d1;
+
+    li:last-child {
+      border-bottom: none;
     }
-    .note:nth-child(even) {
-      background-color: #eaeaea;
-      border-left-color: #c8c8c8;
+
+    li:nth-child(odd) {
+      background-color: #f5f5f5;
     }
-    footer {
-      background-color: #f8f9fa;
-      padding: 10px 0;
-      text-align: center;
-      margin-top: auto;
-      width: 100%;
-      font-size: 12px;
-      color: #a0a0a0;
-    }
-    footer a {
-      color: #a0a0a0;
+
+    li strong {
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <div id="app">
-    <v-app>
-      <v-main>
-        <v-container>
-          <!-- Input Section -->
-          <v-card class="pa-5 mt-5">
-            <v-card-title>
-              <h2>キャラクターとお題を入力してください</h2>
-            </v-card-title>
-            <v-card-text>
-              <p>カンマ区切りで複数の項目を入力してください（例: 上田, 高橋, 山田, 佐藤, 鈴木, 田中, 中村, 小林）</p>
-              <v-textarea outlined label="キャラクターを入力" v-model="characterInput"></v-textarea>
-              <v-textarea outlined label="お題を入力" v-model="topicInput"></v-textarea>
-              <v-btn color="primary" block @click="generatePairs">生成</v-btn>
-            </v-card-text>
-          </v-card>
+    <!-- 入力欄セクション -->
+    <div class="input-section">
+      <h2>キャラクターとお題を入力してください</h2>
+      <p>カンマ区切りで複数の項目を入力してください（例: 上田, 高橋, 山田, 佐藤, 鈴木, 田中, 中村, 小林）</p>
+      <textarea placeholder="キャラクターを入力" v-model="characterInput"></textarea> <!-- キャラクター入力欄 -->
+      <textarea placeholder="お題を入力" v-model="topicInput"></textarea> <!-- お題入力欄 -->
+      <button @click="generatePairs">生成</button> <!-- 生成ボタン -->
+    </div>
 
-          <!-- Results Section -->
-          <v-card class="pa-5 mt-5">
-            <v-card-title>
-              <h2>生成された組み合わせ</h2>
-            </v-card-title>
-            <v-card-text>
-              <v-list dense>
-                <v-list-item v-for="(pair, index) in pairs" :key="index" :class="['note', index % 2 === 0 ? 'even' : 'odd']">
-                  <v-list-item-content>
-                    <v-list-item-title><strong>{{ pair.character }}</strong> - {{ pair.topic }}</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </v-card-text>
-          </v-card>
-        </v-container>
-      </v-main>
-    </v-app>
+    <!-- 結果セクション -->
+    <div id="result">
+      <h2>生成された組み合わせ</h2>
+      <ul>
+        <!-- 生成されたペアをリスト表示 -->
+        <li v-for="(pair, index) in pairs" :key="index">
+          <strong>{{ pair.character }}</strong> - {{ pair.topic }}
+        </li>
+      </ul>
+    </div>
   </div>
 
-  <!-- Footer -->
-  <footer>
-    <p>なにかあれば　→ <a href="https://twitter.com/gowguu" target="_blank">Twitter</a></p>
-  </footer>
-
-  <!-- Vue.js, Vuetify, and dependencies -->
+  <!-- Vue.js本体のスクリプト -->
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.5.10/dist/vuetify.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css"></script>
   <script>
     new Vue({
       el: '#app',
-      vuetify: new Vuetify(),
       data: {
         characterInput: '上田, 高橋, 山田, 佐藤, 鈴木, 田中, 中村, 小林',
         topicInput: '約束, 手紙, 消えた言葉, 二人だけの秘密, 腐れ縁, 夢の中, 想い出の香り, 植え付け',
@@ -116,9 +155,11 @@
             return;
           }
 
+          // ランダムな組み合わせを生成するためにシャッフル
           const shuffledCharacters = this.shuffleArray(characters);
           const shuffledTopics = this.shuffleArray(topics);
 
+          // ペアをクリアして新しいペアを生成
           this.pairs = [];
           for (let i = 0; i < Math.max(shuffledCharacters.length, shuffledTopics.length); i++) {
             const character = shuffledCharacters[i % shuffledCharacters.length] || '';
@@ -127,6 +168,7 @@
           }
         },
         shuffleArray(array) {
+          // Fisher-Yatesアルゴリズムによるシャッフル
           for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
