@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>キャラクターとお題のペア生成</title>
+  <title>ソロ用複数人お題組み合わせツール</title>
   <!-- Vuetify CSS -->
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.5.10/dist/vuetify.min.css" rel="stylesheet">
   <style>
@@ -14,12 +14,12 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      margin: 0;
     }
     #app {
-      max-width: 600px;
+      max-width: 900px;
       width: 100%;
       margin: auto;
-      padding: 20px;
     }
     .note {
       padding: 15px;
@@ -55,7 +55,7 @@
     <v-app>
       <v-main>
         <v-container>
-          <!-- 入力欄セクション -->
+          <!-- Input Section -->
           <v-card class="pa-5 mt-5">
             <v-card-title>
               <h2>キャラクターとお題を入力してください</h2>
@@ -68,7 +68,7 @@
             </v-card-text>
           </v-card>
 
-          <!-- 結果セクション -->
+          <!-- Results Section -->
           <v-card class="pa-5 mt-5">
             <v-card-title>
               <h2>生成された組み合わせ</h2>
@@ -88,7 +88,7 @@
     </v-app>
   </div>
 
-  <!-- フッター -->
+  <!-- Footer -->
   <footer>
     <p>なにかあれば　→ <a href="https://twitter.com/gowguu" target="_blank">Twitter</a></p>
   </footer>
